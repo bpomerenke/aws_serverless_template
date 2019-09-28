@@ -9,6 +9,7 @@ This project gets the nuts and bolts of a terraformed serverless example up and 
 * Dotnet core
    * https://dotnet.microsoft.com/download
    * `dotnet new -i Amazon.Lambda.Templates`
+   * `dotnet tool install -g Amazon.Lambda.Tools`
 
 # Editor / plugins
 * Visual Studio Code

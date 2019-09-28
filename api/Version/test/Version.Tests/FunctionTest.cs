@@ -14,15 +14,15 @@ namespace Version.Tests
     public class FunctionTest
     {
         [Fact]
-        public void TestToUpperFunction()
+        public void TestVersion()
         {
 
             // Invoke the lambda function and confirm the string was upper cased.
             var function = new Function();
             var context = new TestLambdaContext();
-            var upperCase = function.FunctionHandler("hello world", context);
+            var result = function.FunctionHandler(null, context);
 
-            Assert.Equal("HELLO WORLD", upperCase);
+            Assert.Equal("0.1", result.Version);
         }
     }
 }
