@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B0A6528DE3B76674F76B260 /* Pods_dummy_iot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07692A6FF2EF36DAFF480976 /* Pods_dummy_iot.framework */; };
 		5A7BED29233F6B5200C8483D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7BED28233F6B5200C8483D /* AppDelegate.swift */; };
 		5A7BED2B233F6B5200C8483D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7BED2A233F6B5200C8483D /* SceneDelegate.swift */; };
 		5A7BED2D233F6B5200C8483D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7BED2C233F6B5200C8483D /* ViewController.swift */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07692A6FF2EF36DAFF480976 /* Pods_dummy_iot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dummy_iot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CC13D06FA1A924B66857494 /* Pods-dummy_iot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dummy_iot.release.xcconfig"; path = "Target Support Files/Pods-dummy_iot/Pods-dummy_iot.release.xcconfig"; sourceTree = "<group>"; };
 		5A7BED25233F6B5200C8483D /* dummy_iot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dummy_iot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A7BED28233F6B5200C8483D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A7BED2A233F6B5200C8483D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +54,7 @@
 		5A7BED49233F6B5300C8483D /* dummy_iotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dummy_iotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A7BED4D233F6B5300C8483D /* dummy_iotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy_iotUITests.swift; sourceTree = "<group>"; };
 		5A7BED4F233F6B5300C8483D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79F887B6DB7DAE3F628F269F /* Pods-dummy_iot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dummy_iot.debug.xcconfig"; path = "Target Support Files/Pods-dummy_iot/Pods-dummy_iot.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B0A6528DE3B76674F76B260 /* Pods_dummy_iot.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		454AEE4C99F7DBF7ABC3D42E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				07692A6FF2EF36DAFF480976 /* Pods_dummy_iot.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5A7BED1C233F6B5200C8483D = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +98,8 @@
 				5A7BED41233F6B5300C8483D /* dummy_iotTests */,
 				5A7BED4C233F6B5300C8483D /* dummy_iotUITests */,
 				5A7BED26233F6B5200C8483D /* Products */,
+				D95C2AF18FA6635D18BDACB4 /* Pods */,
+				454AEE4C99F7DBF7ABC3D42E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,6 +146,16 @@
 			path = dummy_iotUITests;
 			sourceTree = "<group>";
 		};
+		D95C2AF18FA6635D18BDACB4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				79F887B6DB7DAE3F628F269F /* Pods-dummy_iot.debug.xcconfig */,
+				2CC13D06FA1A924B66857494 /* Pods-dummy_iot.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,9 +163,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A7BED52233F6B5300C8483D /* Build configuration list for PBXNativeTarget "dummy_iot" */;
 			buildPhases = (
+				3E45DBB9CFBBB2E188D90892 /* [CP] Check Pods Manifest.lock */,
 				5A7BED21233F6B5200C8483D /* Sources */,
 				5A7BED22233F6B5200C8483D /* Frameworks */,
 				5A7BED23233F6B5200C8483D /* Resources */,
+				513129FCED95C155EA370A16 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -256,6 +283,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3E45DBB9CFBBB2E188D90892 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-dummy_iot-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		513129FCED95C155EA370A16 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-dummy_iot/Pods-dummy_iot-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-dummy_iot/Pods-dummy_iot-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-dummy_iot/Pods-dummy_iot-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5A7BED21233F6B5200C8483D /* Sources */ = {
@@ -436,6 +505,7 @@
 		};
 		5A7BED53233F6B5300C8483D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79F887B6DB7DAE3F628F269F /* Pods-dummy_iot.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -454,6 +524,7 @@
 		};
 		5A7BED54233F6B5300C8483D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2CC13D06FA1A924B66857494 /* Pods-dummy_iot.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

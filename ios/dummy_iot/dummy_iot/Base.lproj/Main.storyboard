@@ -35,24 +35,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K4m-d1-sgt">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K4m-d1-sgt">
                                 <rect key="frame" x="198" y="390" width="36" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Send"/>
+                                <connections>
+                                    <action selector="sendMessage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Zw-go-mRZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWV-nf-TIp">
+                                <rect key="frame" x="187" y="574" width="59" height="30"/>
+                                <state key="normal" title="Connect"/>
+                                <connections>
+                                    <action selector="connect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="H3q-4q-MSX"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="oC6-hh-VJ4" firstAttribute="centerY" secondItem="a39-Rb-KIF" secondAttribute="centerY" id="2mh-RP-Nz1"/>
                             <constraint firstItem="sjz-Qg-u9v" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="237" id="93w-WX-AYd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MWV-nf-TIp" secondAttribute="trailing" constant="168" id="D8T-IU-jbe"/>
                             <constraint firstItem="oC6-hh-VJ4" firstAttribute="bottom" secondItem="a39-Rb-KIF" secondAttribute="bottom" id="E3d-hI-xLs"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YEJ-F0-eKy" secondAttribute="trailing" constant="51" id="HAc-2S-P7U"/>
                             <constraint firstItem="YEJ-F0-eKy" firstAttribute="leading" secondItem="sjz-Qg-u9v" secondAttribute="trailing" constant="25" id="I2E-x8-lAX"/>
                             <constraint firstItem="oC6-hh-VJ4" firstAttribute="trailing" secondItem="YEJ-F0-eKy" secondAttribute="trailing" id="NFL-Fn-H5W"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MWV-nf-TIp" secondAttribute="bottom" constant="258" id="PVI-bI-sm4"/>
+                            <constraint firstItem="MWV-nf-TIp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="187" id="XSd-TN-Pc9"/>
                             <constraint firstItem="a39-Rb-KIF" firstAttribute="top" secondItem="YEJ-F0-eKy" secondAttribute="bottom" constant="13" id="dVc-YA-8oU"/>
                             <constraint firstItem="sjz-Qg-u9v" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="54" id="jly-Wv-h2B"/>
                             <constraint firstItem="a39-Rb-KIF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="237" id="lyf-y9-bWo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="oC6-hh-VJ4" secondAttribute="bottom" constant="515" id="tsG-XG-YS0"/>
+                            <constraint firstItem="MWV-nf-TIp" firstAttribute="top" secondItem="K4m-d1-sgt" secondAttribute="bottom" constant="154" id="xqi-S0-NcZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

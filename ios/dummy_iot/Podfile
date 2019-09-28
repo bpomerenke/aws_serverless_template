@@ -1,0 +1,4 @@
+use_frameworks!
+target 'dummy_iot' do
+  pod 'CocoaMQTT'
+end
