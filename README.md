@@ -10,3 +10,9 @@ This project gets the nuts and bolts of a terraformed serverless example up and 
 # Editor / plugins
 * Visual Studio Code
   * Terraform
+
+# dev workflow
+* `export AWS_PROFILE=<profile>`
+* `./init.sh`
+* `./deploy.sh`
+* (OPTIONAL) `./teardown.sh`
