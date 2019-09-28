@@ -43,7 +43,7 @@ module "version_lambda" {
   resource_id   = "${aws_api_gateway_resource.version_resource.id}"
 
   variables = {
-    Version = "0.2"
+    Version = "0.3"
   }
 }
 

@@ -6,26 +6,32 @@ using System.Threading.Tasks;
 using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
+using Moq;
 using Newtonsoft.Json;
 using Version;
 
 namespace Version.Tests
 {
-    public class FunctionTest
+    public class LambdaServiceTest
     {
+        
         [Fact]
-        public void TestVersion()
+        public void GetVersion_ReturnsVersionFromEnv()
         {
+            var expectedVersion = "abc";
 
+            var env = new Mock<IEnvironmentWrapper>();
+            env.Setup(x => x.GetEnvironmentVariable("Version")).Returns(expectedVersion);
+            
             // Invoke the lambda function and confirm the string was upper cased.
-            var function = new Function();
+            var testObject = new LambdaService(env.Object);
             var context = new TestLambdaContext();
-            var result = function.FunctionHandler(null, context);
+            var result = testObject.GetVersion(null, context);
 
             Assert.Equal(200, result.StatusCode);
 
             var versionInfo = JsonConvert.DeserializeObject<VersionInfo>(result.Body);
-            Assert.Equal("0.1", versionInfo.Version);
+            Assert.Equal(expectedVersion, versionInfo.Version);
         }
     }
 }
