@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
-
+using Newtonsoft.Json;
 using Version;
 
 namespace Version.Tests
@@ -22,7 +22,10 @@ namespace Version.Tests
             var context = new TestLambdaContext();
             var result = function.FunctionHandler(null, context);
 
-            Assert.Equal("0.1", result.Version);
+            Assert.Equal(200, result.StatusCode);
+
+            var versionInfo = JsonConvert.DeserializeObject<VersionInfo>(result.Body);
+            Assert.Equal("0.1", versionInfo.Version);
         }
     }
 }

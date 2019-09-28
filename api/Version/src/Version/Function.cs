@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Newtonsoft.Json;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -16,11 +14,16 @@ namespace Version
     }
     public class Function
     {
-        public VersionInfo FunctionHandler(string input, ILambdaContext context)
+        public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            return new VersionInfo
+            var versionInfo = new VersionInfo
             {
-                Version = "0.1"
+                Version = Environment.GetEnvironmentVariable("Version")
+            };
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = 200,
+                Body = JsonConvert.SerializeObject(versionInfo)
             };
         }
     }
