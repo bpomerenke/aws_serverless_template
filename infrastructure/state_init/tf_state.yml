@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an S3 Bucket and DynamoDB Table for storing Terraform state and S3 bucket for account configuration
+Parameters:
+  BucketName:
+    Default: bp-aws-serverless-template-tfstate
+    Type: String
+  ConfigBucketName:
+    Default: bp-aws-serverless-template-config
+    Type: String
+  TableName:
+    Default: bp-aws-serverless-template-tfstate
+    Type: String
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+  ConfigBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref ConfigBucketName
+      VersioningConfiguration:
+        Status: Enabled
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:PutObject
+          Condition:
+            "Null":
+              "s3:x-amz-server-side-encryption": true
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${BucketName}/*
+        - Action: s3:PutObject
+          Condition:
+            StringNotEquals:
+              "s3:x-amz-server-side-encryption": AES256
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${BucketName}/*
+        - Action: s3:*
+          Condition:
+            Bool:
+              "aws:SecureTransport": false
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${BucketName}/*
+  ConfigBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ConfigBucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:PutObject
+          Condition:
+            "Null":
+              "s3:x-amz-server-side-encryption": true
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${ConfigBucket}/*
+        - Action: s3:PutObject
+          Condition:
+            StringNotEquals:
+              "s3:x-amz-server-side-encryption": AES256
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${ConfigBucket}/*
+        - Action: s3:*
+          Condition:
+            Bool:
+              "aws:SecureTransport": false
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub arn:aws:s3:::${ConfigBucket}/*
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: LockID
+        AttributeType: S
+      KeySchema:
+      - AttributeName: LockID
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: !Ref TableName

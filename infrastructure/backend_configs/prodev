@@ -1,0 +1,3 @@
+bucket="bp-aws-serverless-template-tfstate"
+dynamodb_table="bp-aws-serverless-template-tfstate"
+key="prodev-infrastructure"
