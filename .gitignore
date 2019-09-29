@@ -10,3 +10,7 @@
 
 # Mac OS
 .DS_Store
+
+# certs
+*.pem
+*.p12

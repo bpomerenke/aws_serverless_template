@@ -10,6 +10,10 @@ This project gets the nuts and bolts of a terraformed serverless example up and 
    * https://dotnet.microsoft.com/download
    * `dotnet new -i Amazon.Lambda.Templates`
    * `dotnet tool install -g Amazon.Lambda.Tools`
+* jq
+   * `brew install jq`
+* mosquitto (for testing)
+   * `brew install mosquitto`
 
 # Editor / plugins
 * Visual Studio Code
