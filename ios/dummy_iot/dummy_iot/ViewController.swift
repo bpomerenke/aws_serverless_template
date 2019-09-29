@@ -25,16 +25,69 @@ class ViewController: UIViewController {
     }
     @IBAction func connect(_ sender: Any) {
         print("connecting...")
-        let clientID = "CocoaMQTT-sample-" + String(ProcessInfo().processIdentifier)
-        mqtt = CocoaMQTT(clientID: clientID, host: defaultHost, port: 1883)
+        selfSignedSSLSetting()
+    }
+    
+    func selfSignedSSLSetting() {
+        let clientID = "test03"
+        mqtt = CocoaMQTT(clientID: clientID, host: defaultHost, port: 8883)
         mqtt!.username = ""
         mqtt!.password = ""
         mqtt!.willMessage = CocoaMQTTWill(topic: "/will", message: "dieout")
         mqtt!.keepAlive = 60
         mqtt!.delegate = self
         mqtt!.enableSSL = true
+        mqtt!.allowUntrustCACertificate = true
+        
+        let clientCertArray = getClientCertFromP12File(certName: clientID, certPassword: "123")
+        
+        var sslSettings: [String: NSObject] = [:]
+        sslSettings[kCFStreamSSLCertificates as String] = clientCertArray
+        
+        mqtt!.sslSettings = sslSettings
+        
+        let connecting = mqtt!.connect()
+        print("connecting: \(connecting)")
     }
     
+    func getClientCertFromP12File(certName: String, certPassword: String) -> CFArray? {
+        // get p12 file path
+        let resourcePath = Bundle.main.path(forResource: certName, ofType: "p12")
+        
+        guard let filePath = resourcePath, let p12Data = NSData(contentsOfFile: filePath) else {
+            print("Failed to open the certificate file: \(certName).p12")
+            return nil
+        }
+        
+        // create key dictionary for reading p12 file
+        let key = kSecImportExportPassphrase as String
+        let options : NSDictionary = [key: certPassword]
+        
+        var items : CFArray?
+        let securityError = SecPKCS12Import(p12Data, options, &items)
+        
+        guard securityError == errSecSuccess else {
+            if securityError == errSecAuthFailed {
+                print("ERROR: SecPKCS12Import returned errSecAuthFailed. Incorrect password?")
+            } else {
+                print("Failed to open the certificate file: \(certName).p12")
+            }
+            return nil
+        }
+        
+        guard let theArray = items, CFArrayGetCount(theArray) > 0 else {
+            return nil
+        }
+        let dictionary = (theArray as NSArray).object(at: 0)
+        guard let identity = (dictionary as AnyObject).value(forKey: kSecImportItemIdentity as String) else {
+            return nil
+        }
+        
+        let certArray = [identity] as CFArray
+        
+        return certArray
+    }
+
 }
 
 // From: https://github.com/emqx/CocoaMQTT

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		5A7BED38233F6B5300C8483D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A7BED36233F6B5300C8483D /* LaunchScreen.storyboard */; };
 		5A7BED43233F6B5300C8483D /* dummy_iotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7BED42233F6B5300C8483D /* dummy_iotTests.swift */; };
 		5A7BED4E233F6B5300C8483D /* dummy_iotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7BED4D233F6B5300C8483D /* dummy_iotUITests.swift */; };
+		5A7BED6623406AFC00C8483D /* test03.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 5A7BED6523406AFC00C8483D /* test03.p12 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		5A7BED49233F6B5300C8483D /* dummy_iotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dummy_iotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A7BED4D233F6B5300C8483D /* dummy_iotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy_iotUITests.swift; sourceTree = "<group>"; };
 		5A7BED4F233F6B5300C8483D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A7BED6523406AFC00C8483D /* test03.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; name = test03.p12; path = ../../../manual_scripts/test03.p12; sourceTree = "<group>"; };
 		79F887B6DB7DAE3F628F269F /* Pods-dummy_iot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dummy_iot.debug.xcconfig"; path = "Target Support Files/Pods-dummy_iot/Pods-dummy_iot.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 		5A7BED27233F6B5200C8483D /* dummy_iot */ = {
 			isa = PBXGroup;
 			children = (
+				5A7BED6523406AFC00C8483D /* test03.p12 */,
 				5A7BED28233F6B5200C8483D /* AppDelegate.swift */,
 				5A7BED2A233F6B5200C8483D /* SceneDelegate.swift */,
 				5A7BED2C233F6B5200C8483D /* ViewController.swift */,
@@ -152,7 +155,6 @@
 				79F887B6DB7DAE3F628F269F /* Pods-dummy_iot.debug.xcconfig */,
 				2CC13D06FA1A924B66857494 /* Pods-dummy_iot.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -264,6 +266,7 @@
 			files = (
 				5A7BED38233F6B5300C8483D /* LaunchScreen.storyboard in Resources */,
 				5A7BED35233F6B5300C8483D /* Assets.xcassets in Resources */,
+				5A7BED6623406AFC00C8483D /* test03.p12 in Resources */,
 				5A7BED30233F6B5200C8483D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
