@@ -19,9 +19,9 @@ class ViewController: UIViewController {
 
     @IBAction func sendMessage(_ sender: Any) {
         print("sending...")
-        let message = "Hello there"
+        let message = "{\"msgType\": \"Message\", \"msgText\": \"Hello there\"}"
         
-        mqtt!.publish("bp-test/messages", withString: message, qos: .qos1)
+        mqtt!.publish("CHAT/Messages", withString: message, qos: .qos1)
     }
     @IBAction func connect(_ sender: Any) {
         print("connecting...")
