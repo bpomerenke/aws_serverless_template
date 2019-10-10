@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using Amazon.Lambda.Core;
-using Newtonsoft.Json;
+using Ingestion.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -8,24 +10,32 @@ namespace Ingestion
 {
     public class Function
     {
-        
+             
+        private readonly ServiceProvider _serviceProvider;
+
+        private void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
+            serviceCollection.AddTransient<ILambdaService, LambdaService>();
+        }
+
+        public Function()
+        { 
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+        }
         /// <summary>
-        /// A simple function that takes a string and does a ToUpper
+        /// Ingests a Message from IOT
         /// </summary>
         /// <param name="message"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public void IngestMessage(Message message, ILambdaContext context)
+        public Task IngestMessage(Message message, ILambdaContext context)
         {
-            context.Logger.LogLine("got message: " + JsonConvert.SerializeObject(message));
+            return _serviceProvider
+                .GetService<ILambdaService>()
+                .IngestMessage(message, context);
         }
-    }
-
-    public class Message
-    {
-        public string ClientId { get; set; }
-        public string Timestamp { get; set; }
-        public string MsgType { get; set; }
-        public string MsgText { get; set; }
     }
 }
