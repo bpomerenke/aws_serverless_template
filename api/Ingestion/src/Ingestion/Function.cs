@@ -1,5 +1,10 @@
+using System;
 using System.Threading.Tasks;
+using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
+using Amazon.Util;
 using Ingestion.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +22,19 @@ namespace Ingestion
         {
             serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
+            serviceCollection.AddTransient<IDynamoDBContext, DynamoDBContext>(x => CreateConfiguredDbContext());
+        }
+
+        private DynamoDBContext CreateConfiguredDbContext()
+        {            
+            var messagesTableName = Environment.GetEnvironmentVariable("MessagesTableName");
+            if (!string.IsNullOrEmpty(messagesTableName))
+            {
+                AWSConfigsDynamoDB.Context.TypeMappings[typeof(Message)] = new TypeMapping(typeof(Message), messagesTableName);
+            }
+
+            var v2Config = new DynamoDBOperationConfig {Conversion = DynamoDBEntryConversion.V2};
+            return new DynamoDBContext(new AmazonDynamoDBClient(), v2Config);
         }
 
         public Function()

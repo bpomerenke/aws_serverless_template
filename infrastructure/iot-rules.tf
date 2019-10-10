@@ -41,8 +41,8 @@ resource "aws_iam_role_policy" "dynamo_policy" {
             "dynamodb:PutItem"
           ],
           "Resource": [
-            "arn:aws:dynamodb:${var.region}::table/${aws_dynamodb_table.messages_table.id}",
-            "arn:aws:dynamodb:${var.region}::table/${aws_dynamodb_table.messages_table.id}/index/*"
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}",
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}/index/*"
           ]
         }
     ]
