@@ -10,4 +10,10 @@ resource "aws_s3_bucket_object" "version_source" {
   source = "../api/artifacts/Version.zip"
   etag   = "${filemd5("../api/artifacts/Version.zip")}"
 }
+resource "aws_s3_bucket_object" "ingestion_source" {
+  bucket = "${aws_s3_bucket.code_bucket.id}"
+  key    = "IngestionSource"
+  source = "../api/artifacts/Ingestion.zip"
+  etag   = "${filemd5("../api/artifacts/Ingestion.zip")}"
+}
 
