@@ -21,11 +21,57 @@ module "message_ingestion_lambda" {
 
   variables = {
     Version = "0.3"
+    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
   }
 }
+
+resource "aws_iam_role_policy" "dynamo_policy" {
+  name = "${module.message_ingestion_lambda.lambda_function_name}-dynamo-policy"
+  role = "${module.message_ingestion_lambda.lambda_role}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:UpdateItem",
+            "dynamodb:PutItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:${var.region}::table/${aws_dynamodb_table.messages_table.id}",
+            "arn:aws:dynamodb:${var.region}::table/${aws_dynamodb_table.messages_table.id}/index/*"
+          ]
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_lambda_permission" "message_ingestion_permission" {
   statement_id  = "AllowExecutionFromIot"
   action        = "lambda:InvokeFunction"
   function_name = "${module.message_ingestion_lambda.lambda_function_name}"
   principal     = "iot.amazonaws.com"
+}
+
+# dynamo table
+resource "aws_dynamodb_table" "messages_table" {
+  name         = "messages"
+  billing_mode = "PAY_PER_REQUEST"
+
+  hash_key = "ClientId"
+  range_key = "Timestamp"
+
+  attribute {
+    name = "ClientId"
+    type = "S"
+  }
+
+  attribute {
+    name = "Timestamp"
+    type = "S"
+  }
 }
