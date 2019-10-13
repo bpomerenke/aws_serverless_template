@@ -5,3 +5,7 @@ variable "namespace" {
 variable "region" {
     default = "us-east-2"
 }
+
+variable "domain_name" {
+    type="string"
+}
