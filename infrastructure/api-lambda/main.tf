@@ -4,7 +4,7 @@ module "lambda" {
   source_key    = "${var.source_key}"
   source_hash   = "${var.source_hash}"
   function_name = "${var.function_name}"
-  handler       = "${var.function_name}"
+  handler       = "${var.handler}"
   variables     = "${var.variables}"
 }
 
