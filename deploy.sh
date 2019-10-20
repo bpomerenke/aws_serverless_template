@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-export TF_VAR_domain_name=bp-aws-serverless-web-example.com 
-
 cd infrastructure
 terraform apply -auto-approve
 

@@ -1,0 +1,1 @@
+export TF_VAR_domain_name=bp-aws-serverless-web-example.com 
