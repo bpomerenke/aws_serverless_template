@@ -1,9 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { ApiService } from './services/api.service';
+import { of } from 'rxjs';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
+    const apiService = jasmine.createSpyObj<ApiService>(['getVersion']);
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -11,25 +14,22 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [
+        { provide: ApiService, useValue: apiService }
+      ]
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
+  it('should fetch version', () => {
+    const apiService = TestBed.get(ApiService);
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    const component = fixture.componentInstance;
 
-  it(`should have as title 'web'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('web');
-  });
+    const expectedVersion = '0.4';
+    apiService.getVersion.and.returnValue(of({Version: expectedVersion}));
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to web!');
+    
+    expect(component.version).toEqual(expectedVersion);
   });
 });

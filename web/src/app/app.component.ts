@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from './services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -6,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private version:string;
+  version:string;
+
+  constructor(private apiService: ApiService){}
 
   ngOnInit(){
-    this.version = '0.1';
+    this.apiService.getVersion().subscribe(versionObj => {
+      this.version = versionObj.Version;
+    });
   }
 }

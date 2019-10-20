@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json;
@@ -28,7 +29,11 @@ namespace Version
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
-                Body = JsonConvert.SerializeObject(versionInfo)
+                Body = JsonConvert.SerializeObject(versionInfo),
+                Headers = new Dictionary<string, string>
+                {
+                    {"Access-Control-Allow-Origin", Environment.GetEnvironmentVariable("CORSAllowedOrigin")}
+                }
             };
         }
     }

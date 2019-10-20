@@ -44,6 +44,7 @@ module "version_lambda" {
 
   variables = {
     Version = "0.3"
+    CORSAllowedOrigin = "*"
   }
 }
 
