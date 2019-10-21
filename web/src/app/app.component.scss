@@ -1,5 +1,8 @@
-h5 {
-  width: 100%;
-  background: silver;
-  text-align: center;   
+.footer {
+ font-size: 0.8em;
+}
+
+.content {  
+  min-height: calc(100vh - 166px);
+  padding: 20px 30px;
 }

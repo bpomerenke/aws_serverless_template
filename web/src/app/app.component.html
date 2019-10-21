@@ -1,10 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<mat-toolbar color="primary">
   <h1>
     Welcome to AWS Serverless Web Example
   </h1>
+</mat-toolbar>
+<div class="content">
+  <router-outlet></router-outlet>
 </div>
-
-<router-outlet></router-outlet>
-
-<h5>v{{version}}</h5>
+<mat-toolbar color="default" class="footer">AWS Serverless Web Example (api v{{version}})</mat-toolbar>

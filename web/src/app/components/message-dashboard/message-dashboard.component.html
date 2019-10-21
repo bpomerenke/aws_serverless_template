@@ -1,10 +1,5 @@
-<div>
-  messages: 
-  <ul *ngIf="!messageError">
-    <li *ngFor="let message of messages">
-        <strong>{{message.clientId}}:</strong> {{message.msgText}} 
-        <em>{{message.timestamp | date: 'short'}}</em>
-    </li>
-  </ul>
-  <h3 *ngIf="messageError">Error fetching messages</h3>
-</div>
+<mat-card *ngFor="let message of messages">
+    <mat-card-title><strong>{{message.clientId}}:</strong> {{message.msgText}}</mat-card-title>
+    <mat-card-subtitle>{{message.timestamp | date: 'short'}}</mat-card-subtitle>
+</mat-card>
+<h3 *ngIf="messageError">Error fetching messages</h3>

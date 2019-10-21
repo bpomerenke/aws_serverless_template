@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
 import { of } from 'rxjs';
 import { VersionInfo } from './models/version';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -17,7 +18,8 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: ApiService, useValue: apiService }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

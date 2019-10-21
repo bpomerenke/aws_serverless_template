@@ -4,6 +4,7 @@ import { MessageDashboardComponent } from './message-dashboard.component';
 import { ApiService } from 'src/app/services/api.service';
 import { Message } from 'src/app/models/message';
 import { of, throwError } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('MessageDashboardComponent', () => {
   let component: MessageDashboardComponent;
@@ -15,7 +16,9 @@ describe('MessageDashboardComponent', () => {
       declarations: [ MessageDashboardComponent ],
       providers: [
         { provide: ApiService, useValue: apiService }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+
     })
     .compileComponents();
   }));
