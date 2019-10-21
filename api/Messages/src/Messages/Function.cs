@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Common;
@@ -20,7 +17,8 @@ namespace Messages
         {
             serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
-            serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();
+            serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();            
+            serviceCollection.AddTransient<IDynamoDBContext, DynamoDBContext>(x => DynamoDbConfig.CreateConfiguredDbContext());
         }
 
         public Function()
