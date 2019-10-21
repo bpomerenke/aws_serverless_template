@@ -19,6 +19,7 @@ namespace Version
         {
             serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
+            serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();
         }
 
         public Function()
@@ -33,7 +34,6 @@ namespace Version
             return _serviceProvider
                 .GetService<ILambdaService>()
                 .GetVersion(request, context);
-
         }
     }
 }

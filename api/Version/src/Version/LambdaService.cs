@@ -15,10 +15,12 @@ namespace Version
     public class LambdaService : ILambdaService
     {
         private readonly IEnvironmentWrapper _env;
+        private readonly IResponseWrapper _responseWrapper;
 
-        public LambdaService(IEnvironmentWrapper env)
+        public LambdaService(IEnvironmentWrapper env, IResponseWrapper responseWrapper)
         {
             _env = env;
+            _responseWrapper = responseWrapper;
         }
 
         public APIGatewayProxyResponse GetVersion(APIGatewayProxyRequest request, ILambdaContext context)
@@ -27,15 +29,8 @@ namespace Version
             {
                 Version = _env.GetEnvironmentVariable("Version")
             };
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = 200,
-                Body = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings{ ContractResolver = new CamelCasePropertyNamesContractResolver() }),
-                Headers = new Dictionary<string, string>
-                {
-                    {"Access-Control-Allow-Origin", Environment.GetEnvironmentVariable("CORSAllowedOrigin")}
-                }
-            };
+
+            return _responseWrapper.Success(versionInfo);
         }
     }
 }
