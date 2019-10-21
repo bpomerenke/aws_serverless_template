@@ -4,7 +4,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Version
+namespace Common
 {
     public interface IResponseWrapper
     {
