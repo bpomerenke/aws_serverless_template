@@ -2,7 +2,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
-using Ingestion.Models;
+using Common;
+using Common.Models;
 using Newtonsoft.Json;
 
 namespace Ingestion

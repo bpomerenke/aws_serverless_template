@@ -1,4 +1,4 @@
-namespace Ingestion.Models
+namespace Common.Models
 {
     public class Message
     {

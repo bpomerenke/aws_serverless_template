@@ -2,7 +2,8 @@ using System.Threading;
 using Amazon.DynamoDBv2.DataModel;
 using Xunit;
 using Amazon.Lambda.TestUtilities;
-using Ingestion.Models;
+using Common;
+using Common.Models;
 using Moq;
 
 namespace Ingestion.Tests

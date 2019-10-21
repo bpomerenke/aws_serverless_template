@@ -1,6 +1,6 @@
 using System;
 
-namespace Version
+namespace Common
 {
     public interface IEnvironmentWrapper
     {

@@ -6,6 +6,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
+using Common;
 using Moq;
 using Newtonsoft.Json;
 using Version;
