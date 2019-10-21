@@ -1,9 +1,10 @@
 <div>
   messages: 
-  <li *ngIf="!messageError">
-    <ul *ngFor="let message of messages">
-      {{message.clientId}}: {{message.msgText}} {{message.timestamp | date: 'short'}}
-    </ul>
-  </li>
+  <ul *ngIf="!messageError">
+    <li *ngFor="let message of messages">
+        <strong>{{message.clientId}}:</strong> {{message.msgText}} 
+        <em>{{message.timestamp | date: 'short'}}</em>
+    </li>
+  </ul>
   <h3 *ngIf="messageError">Error fetching messages</h3>
 </div>
