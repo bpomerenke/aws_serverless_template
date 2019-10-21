@@ -15,3 +15,7 @@ dotnet lambda package --framework netcoreapp2.1 -o ../../../artifacts/Messages.z
 cd -
 cd api/Ingestion/src/Ingestion
 dotnet lambda package --framework netcoreapp2.1 -o ../../../artifacts/Ingestion.zip
+
+cd -
+cd api/WebSocket/src/WebSocket
+dotnet lambda package --framework netcoreapp2.1 -o ../../../artifacts/WebSocket.zip

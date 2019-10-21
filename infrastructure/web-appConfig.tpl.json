@@ -1,4 +1,5 @@
 {
-    "api": "${apiBaseUrl}"
+    "api": "${apiBaseUrl}",
+    "ws": "${wsBaseUrl}"
 }
   

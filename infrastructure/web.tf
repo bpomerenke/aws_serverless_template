@@ -22,7 +22,8 @@ data "template_file" "web_appConfig" {
   template = "${file("web-appConfig.tpl.json")}"
 
   vars = {
-    apiBaseUrl   = "https://${aws_api_gateway_rest_api.api.id}.execute-api.${var.region}.amazonaws.com/deployed"
+    apiBaseUrl = "https://${aws_api_gateway_rest_api.api.id}.execute-api.${var.region}.amazonaws.com/deployed"
+    wsBaseUrl  = "https://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
   }
 }
 

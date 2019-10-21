@@ -22,4 +22,10 @@ resource "aws_s3_bucket_object" "ingestion_source" {
   source = "../api/artifacts/Ingestion.zip"
   etag   = "${filemd5("../api/artifacts/Ingestion.zip")}"
 }
+resource "aws_s3_bucket_object" "websocket_source" {
+  bucket = "${aws_s3_bucket.code_bucket.id}"
+  key    = "WebSocketSource"
+  source = "../api/artifacts/WebSocket.zip"
+  etag   = "${filemd5("../api/artifacts/WebSocket.zip")}"
+}
 
