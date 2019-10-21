@@ -1,3 +1,3 @@
-interface VersionInfo {
+export interface VersionInfo {
     version: string;
 }

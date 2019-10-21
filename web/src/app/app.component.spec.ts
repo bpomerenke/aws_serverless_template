@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
 import { of } from 'rxjs';
+import { VersionInfo } from './models/version';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
+import { VersionInfo } from '../models/version';
 
 describe('ApiService', () => {
   beforeEach(() => {
