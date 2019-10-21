@@ -9,9 +9,9 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient, private appConfig: AppConfigService) { }
 
-  getVersion(): Observable<any>
+  getVersion(): Observable<VersionInfo>
   {
     const baseUrl = this.appConfig.getApiUrl();
-    return this.httpClient.get(`${baseUrl}/version`);
+    return this.httpClient.get<VersionInfo>(`${baseUrl}/version`);
   }
 }

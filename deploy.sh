@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+source env.sh
+
 cd infrastructure
 terraform apply -auto-approve
 

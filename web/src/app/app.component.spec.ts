@@ -26,7 +26,7 @@ describe('AppComponent', () => {
     const component = fixture.componentInstance;
 
     const expectedVersion = '0.4';
-    apiService.getVersion.and.returnValue(of({Version: expectedVersion}));
+    apiService.getVersion.and.returnValue(of({version: expectedVersion} as VersionInfo));
 
     fixture.detectChanges();
     

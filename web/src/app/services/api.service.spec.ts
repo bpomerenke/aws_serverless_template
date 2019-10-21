@@ -24,7 +24,7 @@ describe('ApiService', () => {
       const appConfig = TestBed.get(AppConfigService);
 
       const expectedBaseUrl = 'url goes here';
-      const expectedVersion = { Version: 'foo' }
+      const expectedVersion = { version: 'foo' } as VersionInfo;
       httpClient.get.and.returnValue(of(expectedVersion));
       appConfig.getApiUrl.and.returnValue(expectedBaseUrl);
 

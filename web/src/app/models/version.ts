@@ -1,0 +1,3 @@
+interface VersionInfo {
+    version: string;
+}

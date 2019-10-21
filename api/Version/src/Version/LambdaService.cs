@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Version
 {
@@ -29,7 +30,7 @@ namespace Version
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
-                Body = JsonConvert.SerializeObject(versionInfo),
+                Body = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings{ ContractResolver = new CamelCasePropertyNamesContractResolver() }),
                 Headers = new Dictionary<string, string>
                 {
                     {"Access-Control-Allow-Origin", Environment.GetEnvironmentVariable("CORSAllowedOrigin")}

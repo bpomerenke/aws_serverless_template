@@ -12,8 +12,8 @@ export class AppComponent implements OnInit {
   constructor(private apiService: ApiService){}
 
   ngOnInit(){
-    this.apiService.getVersion().subscribe(versionObj => {
-      this.version = versionObj.Version;
+    this.apiService.getVersion().subscribe(versionInfo => {
+      this.version = versionInfo.version;
     });
   }
 }
