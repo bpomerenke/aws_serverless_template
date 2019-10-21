@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -18,7 +19,7 @@ namespace Messages
             serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
             serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();            
-            serviceCollection.AddTransient<IDynamoDBContext, DynamoDBContext>(x => DynamoDbConfig.CreateConfiguredDbContext());
+            serviceCollection.AddTransient<IDynamoDbContextWrapper, DynamoDbContextWrapper>(x => DynamoDbConfig.CreateConfiguredDbContextWrapper());
         }
 
         public Function()
@@ -28,7 +29,7 @@ namespace Messages
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
         
-        public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        public Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
             return _serviceProvider
                 .GetService<ILambdaService>()

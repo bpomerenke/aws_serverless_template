@@ -11,6 +11,16 @@ namespace Common
     {
         public static DynamoDBContext CreateConfiguredDbContext()
         {            
+            return new DynamoDBContext(new AmazonDynamoDBClient(),  GetConfig());
+        }
+
+        public static DynamoDbContextWrapper CreateConfiguredDbContextWrapper()
+        {
+            return new DynamoDbContextWrapper(new AmazonDynamoDBClient(),  GetConfig());
+        }
+
+        private static DynamoDBOperationConfig GetConfig()
+        {
             var messagesTableName = Environment.GetEnvironmentVariable("MessagesTableName");
             if (!string.IsNullOrEmpty(messagesTableName))
             {
@@ -18,7 +28,7 @@ namespace Common
             }
 
             var v2Config = new DynamoDBOperationConfig {Conversion = DynamoDBEntryConversion.V2};
-            return new DynamoDBContext(new AmazonDynamoDBClient(), v2Config);
+            return v2Config;
         }
     }
 }

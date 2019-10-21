@@ -19,7 +19,32 @@ module "messages_get_lambda" {
   resource_id   = "${aws_api_gateway_resource.messages_resource.id}"
 
   variables = {
+    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
     CORSAllowedOrigin = "*"
   }
+}
+resource "aws_iam_role_policy" "messages_dynamo_policy" {
+  name = "${module.messages_get_lambda.lambda_function_name}-dynamo-policy"
+  role = "${module.messages_get_lambda.lambda_role}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:Scan",
+            "dynamodb:GetItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}",
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}/index/*"
+          ]
+        }
+    ]
+}
+EOF
 }
 
