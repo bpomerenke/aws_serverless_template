@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
 import { VersionInfo } from '../models/version';
+import { Message } from '../models/message';
 
 describe('ApiService', () => {
   beforeEach(() => {
@@ -33,6 +34,27 @@ describe('ApiService', () => {
         const recentCall = httpClient.get.calls.argsFor(0);
         expect(data).toEqual(expectedVersion);
         expect(recentCall[0]).toEqual(`${expectedBaseUrl}/version`);
+
+        done();
+      });
+    });
+  });
+
+  describe('getMessages', () => {
+    it('should get messages from the api', (done) => {
+      const service: ApiService = TestBed.get(ApiService);
+      const httpClient = TestBed.get(HttpClient);
+      const appConfig = TestBed.get(AppConfigService);
+
+      const expectedBaseUrl = 'url goes here';
+      const expectedMessages = [{ clientId: 'foo' } as Message];
+      httpClient.get.and.returnValue(of(expectedMessages));
+      appConfig.getApiUrl.and.returnValue(expectedBaseUrl);
+
+      service.getMessages().subscribe(data => {
+        const recentCall = httpClient.get.calls.argsFor(0);
+        expect(data).toEqual(expectedMessages);
+        expect(recentCall[0]).toEqual(`${expectedBaseUrl}/messages`);
 
         done();
       });
