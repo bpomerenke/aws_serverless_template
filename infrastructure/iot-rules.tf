@@ -57,21 +57,3 @@ resource "aws_lambda_permission" "message_ingestion_permission" {
   principal     = "iot.amazonaws.com"
 }
 
-# dynamo table
-resource "aws_dynamodb_table" "messages_table" {
-  name         = "messages"
-  billing_mode = "PAY_PER_REQUEST"
-
-  hash_key = "ClientId"
-  range_key = "Timestamp"
-
-  attribute {
-    name = "ClientId"
-    type = "S"
-  }
-
-  attribute {
-    name = "Timestamp"
-    type = "S"
-  }
-}
