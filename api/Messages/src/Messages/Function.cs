@@ -21,8 +21,8 @@ namespace Messages
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
             serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();            
 
-            serviceCollection.AddTransient<IDynamoDBContext, DynamoDBContext>(
-                x => DynamoDbConfig.CreateConfiguredDbContext());
+            serviceCollection.AddTransient<IDynamoDbContextWrapper, DynamoDbContextWrapper>(
+                x => DynamoDbConfig.CreateConfiguredDbContextWrapper());
             serviceCollection.AddTransient<IAmazonApiGatewayManagementApi, AmazonApiGatewayManagementApiClient>(
                 x => ApiGatewayConfig.CreateConfiguredApiGatewayManagementApiClient());
         }
