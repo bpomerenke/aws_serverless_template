@@ -22,6 +22,14 @@ module "websocket_connect_lambda" {
     Version = "0.3"
   }
 }
+resource "aws_lambda_permission" "websocket_connect_permission" {
+  function_name = "${module.websocket_connect_lambda.lambda_arn}"
+  statement_id  = "AllowExecutionFromApiGateway"
+  action        = "lambda:InvokeFunction"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}/*/*"
+}
+
 module "websocket_disconnect_lambda" {
   source        = "./lambda"
   source_bucket = "${aws_s3_bucket.code_bucket.id}"
@@ -34,7 +42,14 @@ module "websocket_disconnect_lambda" {
     Version = "0.3"
   }
 }
+resource "aws_lambda_permission" "websocket_disconnect_permission" {
+  function_name = "${module.websocket_disconnect_lambda.lambda_arn}"
+  statement_id  = "AllowExecutionFromApiGateway"
+  action        = "lambda:InvokeFunction"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}/*/*"
+}
 
 output "ws_url" {
-  value = "https://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
+  value = "wss://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
 }

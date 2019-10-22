@@ -14,7 +14,7 @@ namespace WebSocket
     {
         public APIGatewayProxyResponse Connect(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            context.Logger.Log($"connected: {request.RequestContext.ConnectionId}");
+            context.Logger.Log($"connected: {request.RequestContext?.ConnectionId}");
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200
@@ -22,7 +22,7 @@ namespace WebSocket
         }
         public APIGatewayProxyResponse Disconnect(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            context.Logger.Log($"disconnected: {request.RequestContext.ConnectionId}");
+            context.Logger.Log($"disconnected: {request.RequestContext?.ConnectionId}");
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200

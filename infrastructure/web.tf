@@ -23,7 +23,7 @@ data "template_file" "web_appConfig" {
 
   vars = {
     apiBaseUrl = "https://${aws_api_gateway_rest_api.api.id}.execute-api.${var.region}.amazonaws.com/deployed"
-    wsBaseUrl  = "https://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
+    wsBaseUrl  = "wss://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
   }
 }
 
