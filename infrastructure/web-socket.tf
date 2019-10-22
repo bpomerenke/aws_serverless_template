@@ -20,8 +20,34 @@ module "websocket_connect_lambda" {
 
   variables = {
     Version = "0.3"
+    WebSocketConnectionsTableName = "${aws_dynamodb_table.websocket_connections_table.id}"
   }
 }
+resource "aws_iam_role_policy" "websocket_connect_dynamo_policy" {
+  name = "${module.websocket_connect_lambda.lambda_function_name}-dynamo-policy"
+  role = "${module.websocket_connect_lambda.lambda_role}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}",
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}/index/*"
+          ]
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_lambda_permission" "websocket_connect_permission" {
   function_name = "${module.websocket_connect_lambda.lambda_arn}"
   statement_id  = "AllowExecutionFromApiGateway"
@@ -40,8 +66,34 @@ module "websocket_disconnect_lambda" {
 
   variables = {
     Version = "0.3"
+    WebSocketConnectionsTableName = "${aws_dynamodb_table.websocket_connections_table.id}"
   }
 }
+resource "aws_iam_role_policy" "websocket_disconnect_dynamo_policy" {
+  name = "${module.websocket_disconnect_lambda.lambda_function_name}-dynamo-policy"
+  role = "${module.websocket_disconnect_lambda.lambda_role}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}",
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}/index/*"
+          ]
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_lambda_permission" "websocket_disconnect_permission" {
   function_name = "${module.websocket_disconnect_lambda.lambda_arn}"
   statement_id  = "AllowExecutionFromApiGateway"
@@ -52,4 +104,22 @@ resource "aws_lambda_permission" "websocket_disconnect_permission" {
 
 output "ws_url" {
   value = "wss://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
+}
+
+resource "aws_dynamodb_table" "websocket_connections_table" {
+  name         = "websocket-connections"
+  billing_mode = "PAY_PER_REQUEST"
+
+  hash_key = "Connected"
+  range_key = "ConnectionId"
+
+  attribute {
+    name = "ConnectionId"
+    type = "S"
+  }
+
+  attribute {
+    name = "Connected"
+    type = "S"
+  }
 }

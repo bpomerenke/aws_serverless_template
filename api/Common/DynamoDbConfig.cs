@@ -26,6 +26,13 @@ namespace Common
             {
                 AWSConfigsDynamoDB.Context.TypeMappings[typeof(Message)] = new TypeMapping(typeof(Message), messagesTableName);
             }
+            
+            var webSocketConnectionsTableName = Environment.GetEnvironmentVariable("WebSocketConnectionsTableName");
+            if (!string.IsNullOrEmpty(webSocketConnectionsTableName))
+            {
+                AWSConfigsDynamoDB.Context.TypeMappings[typeof(WebSocketConnection)] = 
+                    new TypeMapping(typeof(WebSocketConnection), webSocketConnectionsTableName);
+            }
 
             var v2Config = new DynamoDBOperationConfig {Conversion = DynamoDBEntryConversion.V2};
             return v2Config;

@@ -37,7 +37,7 @@ module "messages_notifications_trigger" {
 
   variables = {
     Version = "0.3"
-    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
+    WebSocketConnectionsTableName = "${aws_dynamodb_table.websocket_connections_table.id}"
     ServiceURL        = "https://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
   }
 }
@@ -60,6 +60,18 @@ resource "aws_iam_role_policy" "messages_notifications_dynamo_policy" {
                 "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}/stream/*"
             ],
             "Effect": "Allow"
+        },        
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:Scan",
+            "dynamodb:GetItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}",
+            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.websocket_connections_table.id}/index/*"
+          ]
         },
         {
             "Action": [

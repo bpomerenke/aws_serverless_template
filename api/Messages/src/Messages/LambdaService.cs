@@ -1,11 +1,16 @@
+using System;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.ApiGatewayManagementApi;
+using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Common;
 using Common.Models;
+using Newtonsoft.Json;
 
 namespace Messages
 {
@@ -42,10 +47,30 @@ namespace Messages
             return _responseWrapper.Success(messages);
         }
 
-        public Task NotifyMessageUpdate(object input, ILambdaContext context)
+        public async Task NotifyMessageUpdate(object input, ILambdaContext context)
         {
             context.Logger.LogLine("notifying message");
-            return Task.CompletedTask;
+            var cancellationTokenSource = new CancellationTokenSource();
+            var connections = await _dynamoDbContext.ScanAsync<WebSocketConnection>(new ScanCondition[0])
+                .GetRemainingAsync(cancellationTokenSource.Token);
+
+            foreach (var connection in connections)
+            {
+                try
+                {
+                    await _apiGatewayManagementApi.PostToConnectionAsync(new PostToConnectionRequest
+                    {
+                        ConnectionId = connection.ConnectionId,
+                        Data = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(input)))
+                    }, cancellationTokenSource.Token);
+
+                }
+                catch (Exception e)
+                {
+                    context.Logger.LogLine($"failed to send to {connection.ConnectionId}...moving on");
+                    context.Logger.LogLine(e.ToString());
+                }
+            }
         }
     }
 }
