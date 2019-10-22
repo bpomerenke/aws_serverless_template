@@ -22,5 +22,9 @@ export class AppConfigService {
     return this.appConfig.api;
   }
 
+  getWsUrl() {
+    return this.appConfig.ws;
+  }
+
 
 }
