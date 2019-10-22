@@ -1,28 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
-
-using WebSocket;
 
 namespace WebSocket.Tests
 {
     public class FunctionTest
     {
         [Fact]
-        public void TestToUpperFunction()
+        public void Connect_Returns200()
         {
 
             // Invoke the lambda function and confirm the string was upper cased.
             var function = new Function();
             var context = new TestLambdaContext();
-            var upperCase = function.FunctionHandler("hello world", context);
+            var response = function.Connect(new APIGatewayProxyRequest(), context);
 
-            Assert.Equal("HELLO WORLD", upperCase);
+            Assert.Equal(200, response.StatusCode);
+        }
+        
+        [Fact]
+        public void Disconnect_Returns200()
+        {
+            // Invoke the lambda function and confirm the string was upper cased.
+            var function = new Function();
+            var context = new TestLambdaContext();
+            var response = function.Disconnect(new APIGatewayProxyRequest(), context);
+
+            Assert.Equal(200, response.StatusCode);
         }
     }
 }
