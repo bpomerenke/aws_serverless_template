@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -19,7 +20,11 @@ namespace Messages
             serviceCollection.AddTransient<IEnvironmentWrapper, EnvironmentWrapper>();
             serviceCollection.AddTransient<ILambdaService, LambdaService>();
             serviceCollection.AddTransient<IResponseWrapper, ResponseWrapper>();            
-            serviceCollection.AddTransient<IDynamoDbContextWrapper, DynamoDbContextWrapper>(x => DynamoDbConfig.CreateConfiguredDbContextWrapper());
+
+            serviceCollection.AddTransient<IDynamoDBContext, DynamoDBContext>(
+                x => DynamoDbConfig.CreateConfiguredDbContext());
+            serviceCollection.AddTransient<IAmazonApiGatewayManagementApi, AmazonApiGatewayManagementApiClient>(
+                x => ApiGatewayConfig.CreateConfiguredApiGatewayManagementApiClient());
         }
 
         public Function()
@@ -34,6 +39,13 @@ namespace Messages
             return _serviceProvider
                 .GetService<ILambdaService>()
                 .GetMessages(request, context);
+        }
+
+        public Task NotifyMessageUpdate(object input, ILambdaContext context)
+        {
+            return _serviceProvider
+                .GetService<ILambdaService>()
+                .NotifyMessageUpdate(input, context);
         }
     }
 }

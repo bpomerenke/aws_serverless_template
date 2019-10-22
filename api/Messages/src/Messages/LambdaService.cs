@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -12,6 +12,7 @@ namespace Messages
     public interface ILambdaService
     {
         Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context);
+        Task NotifyMessageUpdate(object input, ILambdaContext context);
     }
     
     public class LambdaService : ILambdaService
@@ -19,12 +20,17 @@ namespace Messages
         private readonly IEnvironmentWrapper _env;
         private readonly IResponseWrapper _responseWrapper;
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
+        private readonly IAmazonApiGatewayManagementApi _apiGatewayManagementApi;
 
-        public LambdaService(IEnvironmentWrapper env, IResponseWrapper responseWrapper, IDynamoDbContextWrapper dynamoDbContext)
+        public LambdaService(IEnvironmentWrapper env, 
+            IResponseWrapper responseWrapper, 
+            IDynamoDbContextWrapper dynamoDbContext,
+            IAmazonApiGatewayManagementApi apiGatewayManagementApi)
         {
             _env = env;
             _responseWrapper = responseWrapper;
             _dynamoDbContext = dynamoDbContext;
+            _apiGatewayManagementApi = apiGatewayManagementApi;
         }
 
         public async Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context)
@@ -34,6 +40,12 @@ namespace Messages
                 .GetRemainingAsync(cancellationTokenSource.Token);
             
             return _responseWrapper.Success(messages);
+        }
+
+        public Task NotifyMessageUpdate(object input, ILambdaContext context)
+        {
+            context.Logger.LogLine("notifying message");
+            return Task.CompletedTask;
         }
     }
 }

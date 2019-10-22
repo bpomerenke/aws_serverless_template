@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.TestUtilities;
@@ -11,7 +12,19 @@ using Xunit;
 namespace Messages.Tests
 {
     public class LambdaServiceTest
-    {    
+    {
+        readonly Mock<IEnvironmentWrapper> _env = new Mock<IEnvironmentWrapper>();
+        readonly Mock<IResponseWrapper> _responseWrapper = new Mock<IResponseWrapper>();
+        readonly Mock<IDynamoDbContextWrapper> _dynamoDbContextWrapper = new Mock<IDynamoDbContextWrapper>();
+        readonly Mock<IAmazonApiGatewayManagementApi> _apiGatewayManagementApi = new Mock<IAmazonApiGatewayManagementApi>();
+
+        readonly LambdaService _testObject;
+
+        public LambdaServiceTest()
+        {
+            _testObject = new LambdaService(_env.Object, _responseWrapper.Object, _dynamoDbContextWrapper.Object, _apiGatewayManagementApi.Object);
+        }
+        
         [Fact]
         public async void GetMessages_ReturnsMessagesFromDb()
         {
@@ -21,21 +34,17 @@ namespace Messages.Tests
             };
             var expectedResponse = new APIGatewayProxyResponse();
 
-            var env = new Mock<IEnvironmentWrapper>();
-            var responseWrapper = new Mock<IResponseWrapper>();
-            var dynamoDbContextWrapper = new Mock<IDynamoDbContextWrapper>();
 
             var asyncSearch = new Mock<IAsyncSearchWrapper<Message>>();
             asyncSearch.Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(expectedMessages);
-            dynamoDbContextWrapper.Setup(x => x.ScanAsync<Message>(It.IsAny<ScanCondition[]>(), null))
+            _dynamoDbContextWrapper.Setup(x => x.ScanAsync<Message>(It.IsAny<ScanCondition[]>(), null))
                 .Returns(asyncSearch.Object);
-            responseWrapper.Setup(x => x.Success(expectedMessages))
+            _responseWrapper.Setup(x => x.Success(expectedMessages))
                 .Returns(expectedResponse);
             
             // Invoke the lambda function and confirm the string was upper cased.
-            var testObject = new LambdaService(env.Object, responseWrapper.Object, dynamoDbContextWrapper.Object);
             var context = new TestLambdaContext();
-            var result = await testObject.GetMessages(null, context);
+            var result = await _testObject.GetMessages(null, context);
 
             Assert.Equal(expectedResponse, result);
         }
