@@ -3,6 +3,7 @@ using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.DynamoDBEvents;
 using Common;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,11 +42,11 @@ namespace Messages
                 .GetMessages(request, context);
         }
 
-        public Task NotifyMessageUpdate(object input, ILambdaContext context)
+        public Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context)
         {
             return _serviceProvider
                 .GetService<ILambdaService>()
-                .NotifyMessageUpdate(input, context);
+                .NotifyMessageUpdate(update, context);
         }
     }
 }

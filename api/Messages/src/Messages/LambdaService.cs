@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.DynamoDBEvents;
 using Common;
 using Common.Models;
 using Newtonsoft.Json;
@@ -17,7 +19,7 @@ namespace Messages
     public interface ILambdaService
     {
         Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context);
-        Task NotifyMessageUpdate(object input, ILambdaContext context);
+        Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context);
     }
     
     public class LambdaService : ILambdaService
@@ -47,30 +49,38 @@ namespace Messages
             return _responseWrapper.Success(messages);
         }
 
-        public async Task NotifyMessageUpdate(object input, ILambdaContext context)
+        public async Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context)
         {
             context.Logger.LogLine("notifying message");
             var cancellationTokenSource = new CancellationTokenSource();
-            var connections = await _dynamoDbContext.ScanAsync<WebSocketConnection>(new ScanCondition[0])
+            var connections = await _dynamoDbContext.QueryAsync<WebSocketConnection>("true")
                 .GetRemainingAsync(cancellationTokenSource.Token);
 
-            foreach (var connection in connections)
+            foreach (var record in update.Records)
             {
-                try
+                var jsonResult = Document.FromAttributeMap(record.Dynamodb.NewImage).ToJson();
+                var message = JsonConvert.DeserializeObject<Message>(jsonResult);
+                foreach (var connection in connections)
                 {
-                    await _apiGatewayManagementApi.PostToConnectionAsync(new PostToConnectionRequest
+                    try
                     {
-                        ConnectionId = connection.ConnectionId,
-                        Data = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(input)))
-                    }, cancellationTokenSource.Token);
-
-                }
-                catch (Exception e)
-                {
-                    context.Logger.LogLine($"failed to send to {connection.ConnectionId}...moving on");
-                    context.Logger.LogLine(e.ToString());
+                        context.Logger.LogLine($"sending update to {connection.ConnectionId}...");
+                        await _apiGatewayManagementApi.PostToConnectionAsync(new PostToConnectionRequest
+                        {
+                            ConnectionId = connection.ConnectionId,
+                            Data = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message)))
+                        }, cancellationTokenSource.Token);
+                        context.Logger.LogLine($"update sent");
+                    }
+                    catch (Exception e)
+                    {
+                        context.Logger.LogLine($"failed to send to {connection.ConnectionId}...moving on");
+                        context.Logger.LogLine(e.ToString());
+                    }
                 }
             }
+
+            
         }
     }
 }
