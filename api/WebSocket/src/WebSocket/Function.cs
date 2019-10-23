@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Amazon.ApiGatewayManagementApi;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Common;

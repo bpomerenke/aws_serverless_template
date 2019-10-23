@@ -43,6 +43,7 @@ namespace WebSocket
                 StatusCode = 200
             };
         }
+        
         public async Task<APIGatewayProxyResponse> Disconnect(APIGatewayProxyRequest request, ILambdaContext context)
         {
             context.Logger.Log($"disconnected: {request.RequestContext?.ConnectionId}");
