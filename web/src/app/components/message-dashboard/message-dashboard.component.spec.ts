@@ -6,6 +6,7 @@ import { Message } from 'src/app/models/message';
 import { of, throwError, Subscriber, observable, Observable } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { WebsocketService } from 'src/app/services/websocket.service';
+import { FormsModule } from '@angular/forms';
 
 describe('MessageDashboardComponent', () => {
   let component: MessageDashboardComponent;
@@ -15,6 +16,7 @@ describe('MessageDashboardComponent', () => {
     const apiService = jasmine.createSpyObj<ApiService>(['getMessages', 'sendMessage']);
     const wsService = jasmine.createSpyObj<WebsocketService>(['connect']);
     TestBed.configureTestingModule({
+      imports: [FormsModule],
       declarations: [ MessageDashboardComponent ],
       providers: [
         { provide: ApiService, useValue: apiService },

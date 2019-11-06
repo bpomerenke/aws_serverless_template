@@ -16,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppConfigService } from './app-config.service';
 import { MessageDashboardComponent } from './components/message-dashboard/message-dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -38,7 +39,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    FormsModule
   ],
   providers: [
     {

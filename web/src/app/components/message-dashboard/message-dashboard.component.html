@@ -1,9 +1,9 @@
 <mat-card class="form">
     <mat-form-field>
-        <input matInput placeholder="Message" (ngModel)="curMessage">
+        <input matInput placeholder="Message" #message="ngModel" name="message" [(ngModel)]="curMessage">
     </mat-form-field>
     <br/>
-    <button mat-raised-button color="primary">Send</button>
+    <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
 </mat-card>
 <mat-card *ngFor="let message of messages">
     <mat-card-title><strong>{{message.clientId}}:</strong> {{message.msgText}}</mat-card-title>
