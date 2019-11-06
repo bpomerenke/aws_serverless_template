@@ -19,7 +19,7 @@ export class MessageDashboardComponent implements OnInit {
     this.apiService.getMessages().subscribe(messages => {
       this.messages = messages;
       this.wsService.connect().subscribe(message => {
-        console.log('got message: ', message);
+        messages.push(message);
       })
     }, 
     (err) => { this.messageError = err; });
