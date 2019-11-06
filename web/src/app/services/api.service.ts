@@ -20,4 +20,8 @@ export class ApiService {
     const baseUrl = this.appConfig.getApiUrl();
     return this.httpClient.get<Message[]>(`${baseUrl}/messages`);
   }
+
+  sendMessage(message: string): Observable<any> {
+    return of({});
+  }
 }

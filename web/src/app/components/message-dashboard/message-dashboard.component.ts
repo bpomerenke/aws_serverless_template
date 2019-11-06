@@ -13,6 +13,9 @@ export class MessageDashboardComponent implements OnInit {
   messages: Message[];
   messageError: string;
 
+  curMessage: string;
+  sendingMessage = false;
+
   constructor(private apiService: ApiService, private wsService: WebsocketService) { }
 
   ngOnInit() {
@@ -23,6 +26,14 @@ export class MessageDashboardComponent implements OnInit {
       })
     }, 
     (err) => { this.messageError = err; });
+  }
+
+  sendMessage(){
+    this.sendingMessage = true;
+    this.apiService.sendMessage(this.curMessage).subscribe(() => {
+      this.curMessage = '';
+      this.sendingMessage = false;
+    });
   }
 
 }

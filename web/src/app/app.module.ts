@@ -5,7 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { 
   MatMenuModule,
   MatToolbarModule,
-  MatCardModule
+  MatCardModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,7 +35,10 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     BrowserAnimationsModule,
     MatMenuModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     {

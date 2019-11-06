@@ -12,7 +12,7 @@ describe('MessageDashboardComponent', () => {
   let fixture: ComponentFixture<MessageDashboardComponent>;
 
   beforeEach(async(() => {
-    const apiService = jasmine.createSpyObj<ApiService>(['getMessages']);
+    const apiService = jasmine.createSpyObj<ApiService>(['getMessages', 'sendMessage']);
     const wsService = jasmine.createSpyObj<WebsocketService>(['connect']);
     TestBed.configureTestingModule({
       declarations: [ MessageDashboardComponent ],
@@ -70,10 +70,30 @@ describe('MessageDashboardComponent', () => {
     expect(component.messages).toEqual(messages);
     expect(wsService.connect).toHaveBeenCalled();
 
-    const newMessage = { clientId: 'bar'};
+    const newMessage = { clientId: 'bar'} as Message;
     testSubscriber.next(newMessage);
 
     expect(component.messages.length).toEqual(2);
     expect(component.messages[1]).toEqual(newMessage);
+  });
+
+  describe('sendMessage', ()=>{
+    it('should send message', () => {
+      const apiService = TestBed.get(ApiService);
+
+      let testSubscriber: Subscriber<any>;
+      apiService.sendMessage.and.returnValue(new Observable<any>(s=>testSubscriber = s))
+      const message = 'hello there';
+      component.curMessage = message;
+      component.sendMessage();
+      
+      expect(component.sendingMessage).toEqual(true);
+      expect(apiService.sendMessage).toHaveBeenCalledWith(message);
+
+      testSubscriber.next({});
+
+      expect(component.sendingMessage).toEqual(false);
+      expect(component.curMessage).toEqual('');
+    });
   });
 });
