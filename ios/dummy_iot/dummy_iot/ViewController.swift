@@ -8,8 +8,14 @@
 
 import UIKit
 import CocoaMQTT
-
+struct Message: Decodable {
+    let sender: String
+    let msgType: String
+    let msgText: String
+    let msgTime: Double
+}
 class ViewController: UIViewController {
+    let clientID = "test02"
     let defaultHost = "ab5bhz2ubggz4-ats.iot.us-east-2.amazonaws.com"
     var mqtt: CocoaMQTT?
     
@@ -23,11 +29,13 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         messageTable.delegate = self
         messageTable.dataSource = self
+        messageText.delegate = self
     }
 
     @IBAction func sendMessage(_ sender: Any) {
         print("sending...")
-        let message = "{\"msgType\": \"Message\", \"msgText\": \"\(messageText.text!)\"}"
+        let now = Date().timeIntervalSince1970;
+        let message = "{\"sender\": \"\(clientID)\", \"msgType\": \"Message\", \"msgText\": \"\(messageText.text!)\", \"msgTime\": \(now)}"
         
         mqtt!.publish("CHAT/Messages", withString: message, qos: .qos0)
     }
@@ -37,7 +45,6 @@ class ViewController: UIViewController {
     }
     
     func selfSignedSSLSetting() {
-        let clientID = "test03"
         mqtt = CocoaMQTT(clientID: clientID, host: defaultHost, port: 8883)
         mqtt!.username = ""
         mqtt!.password = ""
@@ -98,6 +105,20 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController: UITextFieldDelegate {
+     /**
+      * Called when 'return' key pressed. return NO to ignore.
+      */
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+         messageText.resignFirstResponder()
+         return true
+     }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+
+}
+
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.messages.count;
@@ -105,10 +126,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell") {
-
-            // Set background color.
-            cell.backgroundColor = .green
-
             // Set text of textLabel.
             // ... Use indexPath.item to get the current row index.
             if let label = cell.textLabel {
@@ -165,8 +182,15 @@ extension ViewController: CocoaMQTTDelegate {
     
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
         print("recv'd message: \(message.string!.description), id: \(id)")
-        self.messages.append(message.string!.description)
-        self.messageTable.reloadData()
+        do {
+            let result = try JSONDecoder().decode(Message.self, from: message.string!.data(using: .utf8)!)
+
+            self.messages.append("\(result.sender): \(result.msgText)")
+            self.messageTable.reloadData()
+            print("loaded \(result.msgText)")
+        } catch {
+            print("failed decoding")
+        }
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
