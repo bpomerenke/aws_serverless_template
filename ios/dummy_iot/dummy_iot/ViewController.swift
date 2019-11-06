@@ -12,6 +12,7 @@ import CocoaMQTT
 class ViewController: UIViewController {
     let defaultHost = "ab5bhz2ubggz4-ats.iot.us-east-2.amazonaws.com"
     var mqtt: CocoaMQTT?
+    @IBOutlet weak var messageText: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -19,7 +20,7 @@ class ViewController: UIViewController {
 
     @IBAction func sendMessage(_ sender: Any) {
         print("sending...")
-        let message = "{\"msgType\": \"Message\", \"msgText\": \"Hello there\"}"
+        let message = "{\"msgType\": \"Message\", \"msgText\": \"\(messageText.text!)\"}"
         
         mqtt!.publish("CHAT/Messages", withString: message, qos: .qos1)
     }
