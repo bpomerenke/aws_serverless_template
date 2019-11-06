@@ -56,13 +56,15 @@ resource "aws_api_gateway_method" "options_method" {
   resource_id   = "${var.resource_id}"
   http_method   = "OPTIONS"
   authorization = "NONE"
+  count         = "${var.include_cors}"
 }
 
 resource "aws_api_gateway_method_response" "options_200" {
   rest_api_id   = "${var.rest_api_id}"
   resource_id   = "${var.resource_id}"
-  http_method   = "${aws_api_gateway_method.options_method.http_method}"
+  http_method   = "${aws_api_gateway_method.options_method.*.http_method[0]}"
   status_code   = "200"
+  count         = "${var.include_cors}"
 
   response_models = {
     "application/json" = "Empty"
@@ -80,8 +82,9 @@ resource "aws_api_gateway_method_response" "options_200" {
 resource "aws_api_gateway_integration" "options_integration" {
   rest_api_id   = "${var.rest_api_id}"
   resource_id   = "${var.resource_id}"
-  http_method   = "${aws_api_gateway_method.options_method.http_method}"
+  http_method   = "${aws_api_gateway_method.options_method.*.http_method[0]}"
   type          = "MOCK"
+  count         = "${var.include_cors}"
 
   request_templates = {
     "application/json" = <<EOF
@@ -97,8 +100,9 @@ EOF
 resource "aws_api_gateway_integration_response" "options_integration_response" {
   rest_api_id   = "${var.rest_api_id}"
   resource_id   = "${var.resource_id}"
-  http_method   = "${aws_api_gateway_method.options_method.http_method}"
-  status_code   = "${aws_api_gateway_method_response.options_200.status_code}"
+  http_method   = "${aws_api_gateway_method.options_method.*.http_method[0]}"
+  status_code   = "${aws_api_gateway_method_response.options_200.*.status_code[0]}"
+  count         = "${var.include_cors}"
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"

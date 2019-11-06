@@ -21,6 +21,7 @@ namespace Messages
     {
         Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context);
         Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context);
+        Task<APIGatewayProxyResponse> PostMessage(APIGatewayProxyRequest request, ILambdaContext context);
     }
     
     public class LambdaService : ILambdaService
@@ -48,6 +49,16 @@ namespace Messages
                 .GetRemainingAsync(cancellationTokenSource.Token);
             
             return _responseWrapper.Success(messages);
+        }
+        
+        public async Task<APIGatewayProxyResponse> PostMessage(APIGatewayProxyRequest request, ILambdaContext context)
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var message = JsonConvert.DeserializeObject<Message>(request.Body);
+            
+            await _dynamoDbContext.SaveAsync(message, cancellationTokenSource.Token);
+            
+            return _responseWrapper.Success(message);
         }
 
         public async Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context)
@@ -88,5 +99,6 @@ namespace Messages
 
             
         }
+
     }
 }

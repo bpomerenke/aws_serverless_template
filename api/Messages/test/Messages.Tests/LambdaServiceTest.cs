@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2.DataModel;
@@ -14,6 +15,7 @@ using Common;
 using Common.Models;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Xunit;
 
 namespace Messages.Tests
@@ -53,6 +55,32 @@ namespace Messages.Tests
             var context = new TestLambdaContext();
             var result = await _testObject.GetMessages(null, context);
 
+            Assert.Equal(expectedResponse, result);
+        }
+        
+        
+        [Fact]
+        public async void PostMessage_SavesMessageToDb()
+        {
+            var expectedMessage =
+                new Message {ClientId = "some client", MsgText = "Hello there"};
+            var expectedResponse = new APIGatewayProxyResponse();
+            var request = new APIGatewayProxyRequest
+            {
+                Body = JsonConvert.SerializeObject(expectedMessage)
+            };
+
+            _dynamoDbContextWrapper.Setup(x => x.SaveAsync(expectedMessage, It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _responseWrapper.Setup(x => x.Success(It.IsAny<object>()))
+                .Returns(expectedResponse);
+            
+            // Invoke the lambda function and confirm the string was upper cased.
+            var context = new TestLambdaContext();
+            var result = await _testObject.PostMessage(request, context);
+
+            _dynamoDbContextWrapper.Verify(x=>x.SaveAsync(It.Is<Message>(m => m.MsgText == expectedMessage.MsgText), 
+                It.IsAny<CancellationToken>()), Times.Once);
             Assert.Equal(expectedResponse, result);
         }
 
@@ -137,7 +165,7 @@ namespace Messages.Tests
             await _testObject.NotifyMessageUpdate(update, new TestLambdaContext());
 
             var data = Encoding.UTF8.GetString(postRequest.Data.ToArray());
-            Assert.Equal(JsonConvert.SerializeObject(message), data);
+            Assert.Equal(JsonConvert.SerializeObject(message, new JsonSerializerSettings{ ContractResolver = new CamelCasePropertyNamesContractResolver()}), data);
         }
         
         [Fact]

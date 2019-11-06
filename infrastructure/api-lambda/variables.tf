@@ -46,3 +46,8 @@ variable "memory_size" {
   type    = "string"
   default = "1024"
 }
+
+variable "include_cors" {
+  type    = "string"
+  default = "1"
+}

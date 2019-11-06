@@ -35,11 +35,18 @@ namespace Messages
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
         
-        public Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        public Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context)
         {
             return _serviceProvider
                 .GetService<ILambdaService>()
                 .GetMessages(request, context);
+        }
+        
+        public Task<APIGatewayProxyResponse> PostMessage(APIGatewayProxyRequest request, ILambdaContext context)
+        {
+            return _serviceProvider
+                .GetService<ILambdaService>()
+                .PostMessage(request, context);
         }
 
         public Task NotifyMessageUpdate(DynamoDBEvent update, ILambdaContext context)
