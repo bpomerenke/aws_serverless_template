@@ -3,4 +3,7 @@ mat-card {
   &:hover {
       background: #eee;
   }
+  &.form {
+    background: #ddd;
+  }
 }

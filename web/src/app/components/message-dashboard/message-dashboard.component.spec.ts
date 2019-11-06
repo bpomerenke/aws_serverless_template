@@ -76,7 +76,7 @@ describe('MessageDashboardComponent', () => {
     testSubscriber.next(newMessage);
 
     expect(component.messages.length).toEqual(2);
-    expect(component.messages[1]).toEqual(newMessage);
+    expect(component.messages[0]).toEqual(newMessage);
   });
 
   describe('sendMessage', ()=>{

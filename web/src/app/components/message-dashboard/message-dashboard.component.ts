@@ -20,9 +20,9 @@ export class MessageDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.getMessages().subscribe(messages => {
-      this.messages = messages;
+      this.messages = messages.sort((a,b) => { return b.timestamp.localeCompare(a.timestamp)});
       this.wsService.connect().subscribe(message => {
-        messages.push(message);
+        messages.unshift(message);
       })
     }, 
     (err) => { this.messageError = err; });
