@@ -68,12 +68,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oI7-fL-5Ag">
+                                <rect key="frame" x="54" y="55" width="53" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="MWV-nf-TIp" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="6Hk-9T-qqP"/>
                             <constraint firstItem="sjz-Qg-u9v" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="93w-WX-AYd"/>
                             <constraint firstItem="YEJ-F0-eKy" firstAttribute="centerY" secondItem="sjz-Qg-u9v" secondAttribute="centerY" id="9nc-k8-xt7"/>
+                            <constraint firstItem="oI7-fL-5Ag" firstAttribute="leading" secondItem="sjz-Qg-u9v" secondAttribute="leading" id="FSs-oD-9bg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YEJ-F0-eKy" secondAttribute="trailing" constant="51" id="HAc-2S-P7U"/>
                             <constraint firstItem="YEJ-F0-eKy" firstAttribute="leading" secondItem="sjz-Qg-u9v" secondAttribute="trailing" constant="25" id="I2E-x8-lAX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pM0-6m-qfN" secondAttribute="trailing" constant="10" id="LRG-b4-3TC"/>
@@ -84,10 +91,12 @@
                             <constraint firstItem="MWV-nf-TIp" firstAttribute="top" secondItem="pM0-6m-qfN" secondAttribute="bottom" constant="10" id="f3C-tC-Ygy"/>
                             <constraint firstItem="pM0-6m-qfN" firstAttribute="top" secondItem="K4m-d1-sgt" secondAttribute="bottom" constant="40" id="gZj-6A-wy8"/>
                             <constraint firstItem="sjz-Qg-u9v" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="54" id="jly-Wv-h2B"/>
+                            <constraint firstItem="sjz-Qg-u9v" firstAttribute="top" secondItem="oI7-fL-5Ag" secondAttribute="bottom" constant="8" id="tNe-o9-WK4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="deviceLabel" destination="oI7-fL-5Ag" id="Dbl-5Y-12D"/>
                         <outlet property="messageTable" destination="pM0-6m-qfN" id="rCg-B0-CTc"/>
                         <outlet property="messageText" destination="YEJ-F0-eKy" id="fsI-Pj-fmD"/>
                         <outlet property="sendButton" destination="K4m-d1-sgt" id="gHT-c5-4Lc"/>

@@ -15,10 +15,11 @@ struct Message: Decodable {
     let msgTime: Double
 }
 class ViewController: UIViewController {
-    let clientID = "test02"
+    let clientID = "test03"
     let defaultHost = "ab5bhz2ubggz4-ats.iot.us-east-2.amazonaws.com"
     var mqtt: CocoaMQTT?
     
+    @IBOutlet weak var deviceLabel: UILabel!
     @IBOutlet weak var messageTable: UITableView!
     var messages: [String] = []
     
@@ -30,6 +31,7 @@ class ViewController: UIViewController {
         messageTable.delegate = self
         messageTable.dataSource = self
         messageText.delegate = self
+        deviceLabel.text = clientID
     }
 
     @IBAction func sendMessage(_ sender: Any) {

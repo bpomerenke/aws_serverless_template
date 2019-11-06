@@ -8,6 +8,7 @@ using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
+using Amazon.IotData;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.DynamoDBEvents;
 using Amazon.Lambda.TestUtilities;
@@ -26,12 +27,17 @@ namespace Messages.Tests
         readonly Mock<IResponseWrapper> _responseWrapper = new Mock<IResponseWrapper>();
         readonly Mock<IDynamoDbContextWrapper> _dynamoDbContextWrapper = new Mock<IDynamoDbContextWrapper>();
         readonly Mock<IAmazonApiGatewayManagementApi> _apiGatewayManagementApi = new Mock<IAmazonApiGatewayManagementApi>();
+        readonly Mock<IAmazonIotData> _amazonIotData = new Mock<IAmazonIotData>();
 
         readonly LambdaService _testObject;
 
         public LambdaServiceTest()
         {
-            _testObject = new LambdaService(_env.Object, _responseWrapper.Object, _dynamoDbContextWrapper.Object, _apiGatewayManagementApi.Object);
+            _testObject = new LambdaService(_env.Object, 
+                _responseWrapper.Object, 
+                _dynamoDbContextWrapper.Object, 
+                _apiGatewayManagementApi.Object,
+                _amazonIotData.Object);
         }
         
         [Fact]
