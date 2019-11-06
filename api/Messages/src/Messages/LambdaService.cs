@@ -7,6 +7,8 @@ using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.IotData;
+using Amazon.IotData.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.DynamoDBEvents;
@@ -30,16 +32,19 @@ namespace Messages
         private readonly IResponseWrapper _responseWrapper;
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
         private readonly IAmazonApiGatewayManagementApi _apiGatewayManagementApi;
+        private readonly IAmazonIotData _amazonIotData;
 
         public LambdaService(IEnvironmentWrapper env, 
             IResponseWrapper responseWrapper, 
             IDynamoDbContextWrapper dynamoDbContext,
-            IAmazonApiGatewayManagementApi apiGatewayManagementApi)
+            IAmazonApiGatewayManagementApi apiGatewayManagementApi,
+            IAmazonIotData amazonIotData)
         {
             _env = env;
             _responseWrapper = responseWrapper;
             _dynamoDbContext = dynamoDbContext;
             _apiGatewayManagementApi = apiGatewayManagementApi;
+            _amazonIotData = amazonIotData;
         }
 
         public async Task<APIGatewayProxyResponse> GetMessages(APIGatewayProxyRequest request, ILambdaContext context)
@@ -57,7 +62,14 @@ namespace Messages
             var message = JsonConvert.DeserializeObject<Message>(request.Body);
             
             await _dynamoDbContext.SaveAsync(message, cancellationTokenSource.Token);
-            
+            await _amazonIotData.PublishAsync(new PublishRequest
+            {
+                Topic = $"CHAT/Messages",
+                Qos = 1,
+                Payload = new MemoryStream(
+                    Encoding.UTF8.GetBytes(request.Body))
+            }, cancellationTokenSource.Token);
+
             return _responseWrapper.Success(message);
         }
 

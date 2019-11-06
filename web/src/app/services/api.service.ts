@@ -27,7 +27,9 @@ export class ApiService {
       clientId: 'web', 
       timestamp: new Date().getTime(), 
       msgType: 'Message', 
-      msgText: message 
+      msgText: message ,
+      msgTime: new Date().getTime(),
+      sender: 'web'
     };
     return this.httpClient.post<Message>(`${baseUrl}/messages`, payload);
   }

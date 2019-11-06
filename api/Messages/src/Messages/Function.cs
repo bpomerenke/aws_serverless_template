@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.IotData;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.DynamoDBEvents;
@@ -26,6 +27,8 @@ namespace Messages
                 x => DynamoDbConfig.CreateConfiguredDbContextWrapper());
             serviceCollection.AddTransient<IAmazonApiGatewayManagementApi, AmazonApiGatewayManagementApiClient>(
                 x => ApiGatewayConfig.CreateConfiguredApiGatewayManagementApiClient());
+            serviceCollection.AddTransient<IAmazonIotData, AmazonIotDataClient>(
+                x => IotConfig.CreateAmazonIotDataClient());
         }
 
         public Function()

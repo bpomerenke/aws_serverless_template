@@ -21,6 +21,7 @@ module "messages_get_lambda" {
   variables = {
     MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
     CORSAllowedOrigin = "*"
+    MQTTBroker        = "${var.broker}"
   }
 }
 resource "aws_iam_role_policy" "messages_dynamo_policy" {
@@ -67,6 +68,7 @@ module "messages_post_lambda" {
   variables = {
     MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
     CORSAllowedOrigin = "*"
+    MQTTBroker        = "${var.broker}"
   }
 }
 resource "aws_iam_role_policy" "messages_post_dynamo_policy" {
@@ -88,7 +90,21 @@ resource "aws_iam_role_policy" "messages_post_dynamo_policy" {
             "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}",
             "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.messages_table.id}/index/*"
           ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iot:Connect",
+                "iot:Publish",
+                "iot:Subscribe",
+                "iot:Receive",
+                "iot:GetThingShadow",
+                "iot:UpdateThingShadow",
+                "iot:DeleteThingShadow"
+            ],
+            "Resource": "*"
         }
+
     ]
 }
 EOF

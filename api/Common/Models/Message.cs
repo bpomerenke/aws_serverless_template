@@ -6,5 +6,7 @@ namespace Common.Models
         public string Timestamp { get; set; }
         public string MsgType { get; set; }
         public string MsgText { get; set; }
+        public string Sender { get; set; }
+        public double MsgTime { get; set; }
     }
 }

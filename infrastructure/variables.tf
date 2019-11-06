@@ -9,3 +9,7 @@ variable "region" {
 variable "domain_name" {
     type="string"
 }
+
+variable "broker" {
+    type="string"
+}

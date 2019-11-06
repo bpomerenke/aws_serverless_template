@@ -38,6 +38,7 @@ module "messages_notifications_trigger" {
   variables = {
     Version = "0.3"
     WebSocketConnectionsTableName = "${aws_dynamodb_table.websocket_connections_table.id}"
+    MQTTBroker        = "${var.broker}"
     ServiceURL        = "https://${aws_cloudformation_stack.websocket-api.outputs["GatewayId"]}.execute-api.${var.region}.amazonaws.com/deployed"
   }
 }
