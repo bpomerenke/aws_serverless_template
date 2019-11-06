@@ -13,6 +13,7 @@ using Amazon.Lambda.DynamoDBEvents;
 using Common;
 using Common.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Messages
 {
@@ -65,10 +66,15 @@ namespace Messages
                     try
                     {
                         context.Logger.LogLine($"sending update to {connection.ConnectionId}...");
+                        var settings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        };
+                        var payload = JsonConvert.SerializeObject(message, settings);
                         await _apiGatewayManagementApi.PostToConnectionAsync(new PostToConnectionRequest
                         {
                             ConnectionId = connection.ConnectionId,
-                            Data = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message)))
+                            Data = new MemoryStream(Encoding.UTF8.GetBytes(payload))
                         }, cancellationTokenSource.Token);
                         context.Logger.LogLine($"update sent");
                     }
