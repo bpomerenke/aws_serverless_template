@@ -12,17 +12,24 @@ import CocoaMQTT
 class ViewController: UIViewController {
     let defaultHost = "ab5bhz2ubggz4-ats.iot.us-east-2.amazonaws.com"
     var mqtt: CocoaMQTT?
+    
+    @IBOutlet weak var messageTable: UITableView!
+    var messages: [String] = []
+    
     @IBOutlet weak var messageText: UITextField!
+    @IBOutlet weak var sendButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        messageTable.delegate = self
+        messageTable.dataSource = self
     }
 
     @IBAction func sendMessage(_ sender: Any) {
         print("sending...")
         let message = "{\"msgType\": \"Message\", \"msgText\": \"\(messageText.text!)\"}"
         
-        mqtt!.publish("CHAT/Messages", withString: message, qos: .qos1)
+        mqtt!.publish("CHAT/Messages", withString: message, qos: .qos0)
     }
     @IBAction func connect(_ sender: Any) {
         print("connecting...")
@@ -91,6 +98,33 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.messages.count;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell") {
+
+            // Set background color.
+            cell.backgroundColor = .green
+
+            // Set text of textLabel.
+            // ... Use indexPath.item to get the current row index.
+            if let label = cell.textLabel {
+                label.text = messages[indexPath.item]
+            }
+            // Return cell.
+            return cell
+        }
+
+        // Return empty cell.
+        return UITableViewCell()
+    }
+    
+    
+}
+
 // From: https://github.com/emqx/CocoaMQTT
 
 extension ViewController: CocoaMQTTDelegate {
@@ -115,6 +149,10 @@ extension ViewController: CocoaMQTTDelegate {
     
     func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
         print("new state: \(state)")
+        if state.description == "connected" {
+            self.mqtt!.subscribe("CHAT/Messages")
+            self.sendButton!.isEnabled = true
+        }
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
@@ -127,6 +165,8 @@ extension ViewController: CocoaMQTTDelegate {
     
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
         print("recv'd message: \(message.string!.description), id: \(id)")
+        self.messages.append(message.string!.description)
+        self.messageTable.reloadData()
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
