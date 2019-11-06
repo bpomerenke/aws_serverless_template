@@ -9,7 +9,7 @@ import { Message } from '../models/message';
 
 describe('ApiService', () => {
   beforeEach(() => {
-    const httpClient = jasmine.createSpyObj<HttpClient>(['get']);
+    const httpClient = jasmine.createSpyObj<HttpClient>(['get', 'post']);
     const appConfigService = jasmine.createSpyObj<AppConfigService>(['getApiUrl']);
     TestBed.configureTestingModule({
       providers: [
@@ -60,5 +60,28 @@ describe('ApiService', () => {
       });
     });
   });
+
+  describe('sendMessage', () => {
+    it('sends message to the api', (done) => {
+      const service: ApiService = TestBed.get(ApiService);
+      const httpClient = TestBed.get(HttpClient);
+      const appConfig = TestBed.get(AppConfigService);
+
+      const expectedBaseUrl = 'url goes here';
+      httpClient.post.and.returnValue(of({}));
+      appConfig.getApiUrl.and.returnValue(expectedBaseUrl);
+
+      const message = 'hello';
+      service.sendMessage(message).subscribe(() => {
+        const recentCall = httpClient.post.calls.argsFor(0);
+        expect(recentCall[0]).toEqual(`${expectedBaseUrl}/messages`);
+        expect(recentCall[1].msgText).toEqual(message);
+
+        done();
+      });
+    });
+  });
+
+  
 
 });
