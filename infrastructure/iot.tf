@@ -22,3 +22,9 @@ resource "aws_iot_policy" "cert_pubsub_policy" {
 }
 EOF
 }
+
+data "aws_iot_endpoint" "custom_endpoint" {}
+
+output "iot_endpoint" {
+  value = "${data.aws_iot_endpoint.custom_endpoint.endpoint_address}"
+}
