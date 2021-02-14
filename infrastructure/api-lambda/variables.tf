@@ -1,53 +1,53 @@
 variable "source_bucket" {
-  type = "string"
+  type = string
 }
 
 variable "source_key" {
-  type = "string"
+  type = string
 }
 
 variable "source_hash" {
-  type = "string"
+  type = string
 }
 variable "function_name" {
-  type = "string"
+  type = string
 }
 
 variable "handler" {
-  type = "string"
+  type = string
 }
 
 variable "http_method" {
-  type = "string"
+  type = string
 }
 
 variable "variables" {
-  type = "map"
+  type = map
   default = {}
 }
 
 variable "region" {
-  type = "string"
+  type = string
 }
 
 variable "account_id" {
-  type = "string"
+  type = string
 }
 
 variable "rest_api_id" {
-  type = "string"
+  type = string
 }
 
 variable "resource_id" {
-  type = "string"
+  type = string
 }
 
 variable "memory_size" {
-  type    = "string"
+  type    = string
   default = "1024"
 }
 
 variable "include_cors" {
-  type    = "string"
+  type    = string
   default = "1"
 }

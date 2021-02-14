@@ -1,16 +1,16 @@
 resource "aws_lambda_function" "lambda" {
-  source_code_hash = "${var.source_hash}"
-  function_name    = "${var.function_name}"
-  role             = "${aws_iam_role.lambda_role.arn}"
+  source_code_hash = var.source_hash
+  function_name    = var.function_name
+  role             = aws_iam_role.lambda_role.arn
   runtime          = "dotnetcore2.1"
-  handler          = "${var.handler}"
+  handler          = var.handler
   timeout          = "180"
-  memory_size      = "${var.memory_size}"
-  s3_bucket        = "${var.source_bucket}"
-  s3_key           = "${var.source_key}"
+  memory_size      = var.memory_size
+  s3_bucket        = var.source_bucket
+  s3_key           = var.source_key
 
   environment {
-    variables = "${var.variables}"
+    variables = var.variables
   }
 }
 
@@ -40,7 +40,7 @@ EOF
 
 resource "aws_iam_role_policy" "log_policy" {
   name = "${var.function_name}-log-policy"
-  role = "${aws_iam_role.lambda_role.id}"
+  role = aws_iam_role.lambda_role.id
 
   policy = <<EOF
 {

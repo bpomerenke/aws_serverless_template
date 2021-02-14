@@ -1,32 +1,32 @@
 
 resource "aws_api_gateway_resource" "messages_resource" {
-  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
-  parent_id   = "${aws_api_gateway_rest_api.api.root_resource_id}"
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "messages"
 }
 
 module "messages_get_lambda" {
   source        = "./api-lambda"
-  source_bucket = "${aws_s3_bucket.code_bucket.id}"
-  source_key    = "${aws_s3_bucket_object.messages_source.id}"
-  source_hash   = "${aws_s3_bucket_object.messages_source.etag}"
+  source_bucket = aws_s3_bucket.code_bucket.id
+  source_key    = aws_s3_bucket_object.messages_source.id
+  source_hash   = aws_s3_bucket_object.messages_source.etag
   function_name = "GetMessages"
   handler       = "Messages::Messages.Function::GetMessages"
   http_method   = "GET"
-  region        = "${var.region}"
-  account_id    = "${data.aws_caller_identity.current.account_id}"
-  rest_api_id   = "${aws_api_gateway_rest_api.api.id}"
-  resource_id   = "${aws_api_gateway_resource.messages_resource.id}"
+  region        = var.region
+  account_id    = data.aws_caller_identity.current.account_id
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.messages_resource.id
 
   variables = {
-    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
+    MessagesTableName = aws_dynamodb_table.messages_table.id
     CORSAllowedOrigin = "*"
-    MQTTBroker        = "${var.broker}"
+    MQTTBroker        = var.broker
   }
 }
 resource "aws_iam_role_policy" "messages_dynamo_policy" {
   name = "${module.messages_get_lambda.lambda_function_name}-dynamo-policy"
-  role = "${module.messages_get_lambda.lambda_role}"
+  role = module.messages_get_lambda.lambda_role
 
   policy = <<EOF
 {
@@ -53,27 +53,27 @@ EOF
 
 module "messages_post_lambda" {
   source        = "./api-lambda"
-  source_bucket = "${aws_s3_bucket.code_bucket.id}"
-  source_key    = "${aws_s3_bucket_object.messages_source.id}"
-  source_hash   = "${aws_s3_bucket_object.messages_source.etag}"
+  source_bucket = aws_s3_bucket.code_bucket.id
+  source_key    = aws_s3_bucket_object.messages_source.id
+  source_hash   = aws_s3_bucket_object.messages_source.etag
   function_name = "PostMessage"
   handler       = "Messages::Messages.Function::PostMessage"
   http_method   = "POST"
-  region        = "${var.region}"
-  account_id    = "${data.aws_caller_identity.current.account_id}"
-  rest_api_id   = "${aws_api_gateway_rest_api.api.id}"
-  resource_id   = "${aws_api_gateway_resource.messages_resource.id}"
+  region        = var.region
+  account_id    = data.aws_caller_identity.current.account_id
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.messages_resource.id
   include_cors  = 0
 
   variables = {
-    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
+    MessagesTableName = aws_dynamodb_table.messages_table.id
     CORSAllowedOrigin = "*"
-    MQTTBroker        = "${var.broker}"
+    MQTTBroker        = var.broker
   }
 }
 resource "aws_iam_role_policy" "messages_post_dynamo_policy" {
   name = "${module.messages_post_lambda.lambda_function_name}-dynamo-policy"
-  role = "${module.messages_post_lambda.lambda_role}"
+  role = module.messages_post_lambda.lambda_role
 
   policy = <<EOF
 {

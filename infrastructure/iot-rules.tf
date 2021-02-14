@@ -6,28 +6,28 @@ resource "aws_iot_topic_rule" "message_rule" {
   sql_version = "2016-03-23"
 
   lambda {
-    function_arn  = "${module.message_ingestion_lambda.lambda_arn}"
+    function_arn  = module.message_ingestion_lambda.lambda_arn
   }
 }
 
 # lambda
 module "message_ingestion_lambda" {
   source        = "./lambda"
-  source_bucket = "${aws_s3_bucket.code_bucket.id}"
-  source_key    = "${aws_s3_bucket_object.ingestion_source.id}"
-  source_hash   = "${aws_s3_bucket_object.ingestion_source.etag}"
+  source_bucket = aws_s3_bucket.code_bucket.id
+  source_key    = aws_s3_bucket_object.ingestion_source.id
+  source_hash   = aws_s3_bucket_object.ingestion_source.etag
   function_name = "IngestMessage"
   handler       = "Ingestion::Ingestion.Function::IngestMessage"
 
   variables = {
     Version = "0.3"
-    MessagesTableName = "${aws_dynamodb_table.messages_table.id}"
+    MessagesTableName = aws_dynamodb_table.messages_table.id
   }
 }
 
 resource "aws_iam_role_policy" "dynamo_policy" {
   name = "${module.message_ingestion_lambda.lambda_function_name}-dynamo-policy"
-  role = "${module.message_ingestion_lambda.lambda_role}"
+  role = module.message_ingestion_lambda.lambda_role
 
   policy = <<EOF
 {
@@ -53,7 +53,7 @@ EOF
 resource "aws_lambda_permission" "message_ingestion_permission" {
   statement_id  = "AllowExecutionFromIot"
   action        = "lambda:InvokeFunction"
-  function_name = "${module.message_ingestion_lambda.lambda_function_name}"
+  function_name = module.message_ingestion_lambda.lambda_function_name
   principal     = "iot.amazonaws.com"
 }
 

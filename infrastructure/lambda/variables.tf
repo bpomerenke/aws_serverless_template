@@ -1,28 +1,28 @@
 variable "source_bucket" {
-  type = "string"
+  type = string
 }
 
 variable "source_key" {
-  type = "string"
+  type = string
 }
 
 variable "source_hash" {
-  type = "string"
+  type = string
 }
 variable "function_name" {
-  type = "string"
+  type = string
 }
 
 variable "handler" {
-  type = "string"
+  type = string
 }
 
 variable "variables" {
-  type = "map"
+  type = map
   default = {}
 }
 
 variable "memory_size" {
-  type    = "string"
+  type    = string
   default = "1024"
 }
