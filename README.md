@@ -5,7 +5,8 @@ This project gets the nuts and bolts of a terraformed serverless example up and 
 # prerequisites
 * Terraform
    * `brew install terraform`
-* AWS CLI
+* AWS CLI (built using version 1)
+   * https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html
 * Dotnet core
    * https://dotnet.microsoft.com/download
    * `dotnet new -i Amazon.Lambda.Templates`
